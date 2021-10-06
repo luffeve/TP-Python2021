@@ -1,6 +1,5 @@
-import os
-from posixpath import abspath                                  # Para manejar archivos en distintos sistemas operativos.
-import sys                                 # Por si hay que cortar la ejecucion del programa.
+import os              # Para manejar archivos en distintos sistemas operativos.
+import sys             # Por si hay que cortar la ejecucion del programa.
 
 #categoria: String Char -> [String]
 #Descripcion: Esta funcion recibe la direccion de un archivo cuyo contenido
@@ -38,14 +37,33 @@ def test_categoria():
     assert categoria(jugadoresV2_join, '-') == []
 
 
-    
-#enfrentar: String Strint Integer-> [[String]] 
-#Definicion: Esta funcion recibe las direcciones de los archivos de jugadors y distancias,
-#y tambien el N que representa la distancia maxima para el enfrentamiento de dos jugadores, 
-#retorna una lista de listas con los enfrentamientos correspondientes a una ronda. 
-def enfrentar(jugadores_join, distancias_join, N):
-    jugadores_mayores= categoria(jugadores_join, '+')
-    jugadores_menores= categoria(jugadores_join, '-')
+
+#distancia: String String String-> String
+#definicion: Recibe dos jugadores y un archivo de distancias, luego devuelve la distancia entre los jugadores
+#ingresados
+def distancia(jugador1, jugador2, distancias_join):
+    distancias=open(distancias_join, "r")   #Abro el archivo de distancias en modo lectura
+    ciudadJ1=(jugador1.split(','))[2]       #Del jugador 1, me quedo con su ciudad
+    ciudadJ2=(jugador2.split(','))[2]       #Del jugador 2, me quedo con su ciudad
+
+    for linea in distancias.readlines():    #Por cada linea
+        linea=linea[0:-1] if linea[-1]=="\n" else linea #Para sacar el salto de linea cuando sea necesario
+        if (ciudadJ1 in linea) and (ciudadJ2 in linea): #Si en la linea leida estan las ciudades de ambos jugadores
+            distancia=linea.split(',')[2]   #Entonces me quedo con su distancia
+            
+    distancias.close() #Luego cierro el archivo 
+    return distancia   #Y retorno la distancia
+
+
+#Test para la funcion distancia donde distancias_join toma un archivo creado por el equipo
+#donde se encuentran algunas distancias.
+def test_distancia():
+    distancias_join = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests", "distancias_test.txt")
+    assert distancia("GASTON MORICONI,23,Cordoba","LORENZO RE,21,Rosario", distancias_join) == " 400.9"
+    assert distancia("JOSE LOPEZ,40,CABA","JUAN GARCIA,45,Rosario", distancias_join) == " 299.9"
+        
+
+
 
     
 
