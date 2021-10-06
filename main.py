@@ -1,6 +1,7 @@
 import os
-from posixpath import abspath                                  # Para manejar archivos en distintos sistemas operativos.
-import sys                                 # Por si hay que cortar la ejecucion del programa.
+from ntpath import abspath      # Para manejar archivos en distintos sistemas operativos.
+from posixpath import abspath       # Para manejar archivos en distintos sistemas operativos.
+import sys      # Por si hay que cortar la ejecucion del programa.
 
 #categoria: String Char -> [String]
 #Descripcion: Esta funcion recibe la direccion de un archivo cuyo contenido
