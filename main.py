@@ -61,7 +61,71 @@ def test_distancia():
     distancias_join = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests", "distancias_test.txt")
     assert distancia("GASTON MORICONI,23,Cordoba","LORENZO RE,21,Rosario", distancias_join) == " 400.9"
     assert distancia("JOSE LOPEZ,40,CABA","JUAN GARCIA,45,Rosario", distancias_join) == " 299.9"
-        
+
+#pueden_enfrentarse: String String String Integer --> Boolean
+#recibe dos jugadores y un numero que representara la distancia maxima permitida
+#para que dos jugadores se puedan enfrentar
+def pueden_enfrentarse(jugador1, jugador2, distancias_join, distancia_maxima):
+    ciudadJ1 = jugador1.split(',')[2]
+    ciudadJ2 = jugador2.split(',')[2]
+
+    distancia_entre_jugadores = distancia(jugador1, jugador2, distancias_join)
+
+    return ((ciudadJ1==ciudadJ2) or (float(distancia_entre_jugadores)<=distancia_maxima))
+
+def test_pueden_enfrentarse():
+    distancias_join = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests", "distancias_test.txt")
+    assert pueden_enfrentarse("GASTON MORICONI,23,Cordoba","LORENZO RE,21,Rosario", distancias_join,300) == False
+    assert pueden_enfrentarse("GASTON MORICONI,23,Cordoba","LORENZO RE,21,Rosario", distancias_join,500) == True
+    assert pueden_enfrentarse("JOSE LOPEZ,40,CABA","JUAN GARAY,43,CABA", distancias_join,100) == True
+    assert pueden_enfrentarse("MARIA GONZALEZ,50,CABA","LUCIA SANCHEZ,26,Rosario", distancias_join,200) == False
+
+#es_numero: char -> Boolean
+#Descripcion: Recibe una cadena de caracteres y devuelve True si es numerico o si lo puede convertir a numerico,
+#sino retornara False
+def es_numero(char):
+    try:
+        float(char)
+        return True
+    except ValueError:
+        return False
+
+def test_es_numero():
+    assert es_numero("hola") == False
+    assert es_numero("245j") == False
+    assert es_numero("245") == True
+    assert es_numero(455) == True       
+
+# comenzar_juego: None -> None
+# esta funcion es la que llevara adelante el juego
+#
+def comenzar_juego():
+    
+    #--------------PIDO LOS DATOS DE ENTRADA------------------
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))          # Para mantener una compatibilidad entre S.O.
+    while True:                                                       # Hasta que ingrese un archivo de jugadores valido
+        jugadores_nombre = input("Ingrese el nombre del archivo de jugadores: ")
+        jugadores_join = os.path.join(THIS_FOLDER, jugadores_nombre)
+        if os.path.isfile(jugadores_join):
+            break                                                     
+    while True:                                                       # Hasta que ingrese un archivo de distancias valido 
+        distancias_nombre = input("Ingrese el nombre del archivo de distancias: ")
+        distancias_join = os.path.join(THIS_FOLDER, distancias_nombre)
+        if os.path.isfile(distancias_join):
+            break
+
+    while True:
+        distancia_permitida = input("Ingrese la distancia maxima permitida: ")
+        if es_numero(distancia_permitida):
+            break
+
+    #-----------------------------------------------------------
+
+    #-----------------------------------------------------------
+    resultados = open("resultado.txt", "w") #El archivo de resultados no existe y va a ser creado.
+    #Lista de jugadores
+    jugadores_mayores = categoria(jugadores_join, '+')
+    jugadores_menores = categoria(jugadores_join, '-')
 
 
 
