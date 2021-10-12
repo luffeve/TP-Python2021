@@ -15,8 +15,8 @@ def categoria (jugadores_join, categoria):
         for linea in jugadores.readlines(): #Recorro el archivo 
             edad_jugador = (linea.split(','))[1] #Para saber la edad del jugador
             if edad_jugador >= '18': #Entonces es mayor de edad y lo agrego a la lista
-                jugadores_categoria.append(linea[0:-1] if linea[-1] == "\n" else linea) #Al leer linea por linea todas menos la ultima
-                                                                                        #tienen un salto de linea("\n") que hay que sacar.
+                jugadores_categoria.append(linea[0:-1] if linea[-1] == "\n" else linea) #Al leer linea por linea todas menos la ultima 
+                #tienen un salto de linea("\n") que hay que sacar.
     else: #Entonces deseo los menores de edad
         for linea in jugadores.readlines():
             edad_jugador = (linea.split(','))[1]
@@ -31,7 +31,7 @@ def categoria (jugadores_join, categoria):
 def test_categoria():
     jugadores_join = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests", "jugadores_test.txt")
     jugadoresV2_join = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests", "jugadoresV2_test.txt")
-    assert categoria(jugadores_join, '+') == ["GASTON MORICONI,23,Cruz Alta", "LORENZO RE,21,Rosario"]
+    assert categoria(jugadores_join, '+') == ["GASTON MORICONI", "LORENZO RE"]
     assert categoria(jugadores_join, '-') == ["AGUSTINA LOPEZ,17,Rosario","CAMILA GARCIA,16,CABA"]
     assert categoria(jugadoresV2_join, '+') == []
     assert categoria(jugadoresV2_join, '-') == []
@@ -96,6 +96,25 @@ def test_es_numero():
     assert es_numero("245") == True
     assert es_numero(455) == True       
 
+#nombre_del_jugador: String -> [String]
+#Descripción: Esta funcion recibe la direccion de un archivo cuyo contenido va a ser 
+#una lista de jugadores y luego retorna una lista con solo el nombre de los jugadores.
+
+def nombre_del_jugador(jugadores_join):
+    jugadores=open(jugadores_join, "r") #Abro la lista de jugadores en modo lectura
+    
+    jugadores_categoria=[] #Lista de jugadores a retornar
+
+    if categoria == '+': #Si deseo lista de mayores
+        for linea in jugadores.readlines(): #Recorro el archivo 
+            edad_jugador = (linea.split(','))[1] #Para saber la edad del jugador
+            if edad_jugador >= '18': #Entonces es mayor de edad y lo agrego a la lista
+                jugadores_categoria.append(linea[0:-1] if linea[-1] == "\n" else linea) #Al leer linea por linea todas menos la ultima     
+                edad_jugador = (linea.split(','))[0] #Para separar el nombre del jugador
+            edad_jugador = ''.join(map(str,jugadores_categoria))
+
+
+
 # comenzar_juego: None -> None
 # esta funcion es la que llevara adelante el juego
 #
@@ -126,11 +145,12 @@ def comenzar_juego():
     #Lista de jugadores
     jugadores_mayores = categoria(jugadores_join, '+')
     jugadores_menores = categoria(jugadores_join, '-')
-
-
-
     
+    for linea in resultados.readlines(): #Recorro el archivo 
+            nombre_del_jugador = (linea.split(','))[0] #Para saber el nombre del jugador
+                jugadores_categoria.append(linea[0:-1] if linea[-1] == "\n" else linea)
 
+    resultados.write(jugadores_mayores)
+    resultados.write(jugadores_menores)
 
-
-
+comenzar_juego()
